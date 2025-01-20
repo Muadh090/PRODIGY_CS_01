@@ -1,0 +1,43 @@
+#Caesar encryption by Abdulazeez muadh olatunji
+#Function for encryption
+
+def caesar_cipher_encrypt(text, shift):
+    encrypted_text = []
+    shift = shift % 26
+    for char in text:
+
+        #encrypting the upper and lowercase
+
+        if char.isalpha():
+            base = ord('A') if char.isupper() else ord('a')
+            encrypted_text.append(chr((ord(char) - base + shift) % 26 + base))
+        else:
+            encrypted_text.append(char)
+    return ''.join(encrypted_text)
+    
+#code to dycrypt the text
+
+def caesar_cipher_decrypt(text, shift):
+    shift = shift % 26
+    return caesar_cipher_encrypt(text, -shift)
+
+#code to output the encrypted and decypted input
+
+def caesar_cipher_same_input(text, shift):
+    encrypted = caesar_cipher_encrypt(text, shift)
+    decrypted = caesar_cipher_decrypt(encrypted, shift)
+    return encrypted, decrypted
+
+#conditional statement for the code to output what is inputed
+
+if __name__ == "__main__":
+    user_text = input("Enter text: ").strip()
+    try:
+        shift_value = int(input("Enter shift value: "))
+    except ValueError:
+        print("Invalid shift value! Please enter an integer.")
+    else:
+        encrypted, decrypted = caesar_cipher_same_input(user_text, shift_value)
+        print(f"Encrypted Text: {encrypted}")
+        print(f"Decrypted Text: {decrypted}")
+
