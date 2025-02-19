@@ -1,0 +1,55 @@
+# Description: This script encrypts an image using a simple encryption algorithm and decrypts
+import numpy as np
+from PIL import Image
+
+def encrypt_image(image_path, key):
+    try:
+        # Load image
+        img = Image.open(image_path)
+        img_data = np.array(img)
+
+        # Validate key
+        if not isinstance(key, int) or key < 0 or key > 255:
+            raise ValueError("Key must be an integer between 0 and 255")
+
+        # Apply simple encryption: shifting pixel values by a key
+        encrypted_data = (img_data + key) % 256
+
+        # Create new image from encrypted pixel data
+        encrypted_img = Image.fromarray(encrypted_data.astype(np.uint8))
+        encrypted_img.save('encrypted_image.png')
+        print("Image encrypted successfully!")
+        return 'encrypted_image.png'
+    except Exception as e:
+        print(f"An error occurred during encryption: {e}")
+        return None
+
+def decrypt_image(encrypted_image_path, key):
+    try:
+        # Load encrypted image
+        encrypted_img = Image.open(encrypted_image_path)
+        encrypted_data = np.array(encrypted_img)
+
+        # Validate key
+        if not isinstance(key, int) or key < 0 or key > 255:
+            raise ValueError("Key must be an integer between 0 and 255")
+
+        # Apply simple decryption: shifting pixel values back by the key
+        decrypted_data = (encrypted_data - key) % 256
+
+        # Create new image from decrypted pixel data
+        decrypted_img = Image.fromarray(decrypted_data.astype(np.uint8))
+        decrypted_img.save('decrypted_image.png')
+        print("Image decrypted successfully!")
+        return 'decrypted_image.png'
+    except Exception as e:
+        print(f"An error occurred during decryption: {e}")
+        return None
+
+if __name__ == "__main__":
+    image_path = 'path_to_your_image.png'
+    key = 123
+
+    encrypted_image_path = encrypt_image(image_path, key)
+    if encrypted_image_path:
+        decrypt_image(encrypted_image_path, key)
